@@ -5,36 +5,36 @@ import com.vincit.beertempreader.model.SensorState
 import com.vincit.beertempreader.model.TemperatureTarget
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import com.vincit.util.Test
 
 @Service
 class TemperatureService {
-
-    val sensorMap = HashMap<String, SensorState>()
-    val targetMap = HashMap<String, Double>()
+    val test = Test()
+    val sensorMap = HashMap<String, SensorState?>()
+    val targetMap = HashMap<String, Double?>()
 
     fun saveReadings(readings: List<Reading>): Boolean {
         readings.forEach fe@{reading ->
             val state = sensorMap[reading.id]
             state?.let {
-
                 // Skip saving if temperature hasn't changed.
                 if (reading.`object` >= state.readings.last().`object`) return true
 
                 state.readings.add(reading)
                 sensorMap[reading.id] = SensorState(
-                        sensorId = reading.id,
+                        id = reading.id,
                         timestamp = LocalDateTime.now(),
                         readings = state.readings,
-                        currentTemperature = reading.`object`,
+                        currentTemp = reading.`object`,
                         estimatedFinishTime = countEstimatedFinishTime(state)
                 )
                 return@fe
             }
             sensorMap[reading.id] = SensorState(
-                    sensorId = reading.id,
+                    id = reading.id,
                     timestamp = LocalDateTime.now(),
                     readings = arrayListOf(reading),
-                    currentTemperature = reading.`object`,
+                    currentTemp = reading.`object`,
                     estimatedFinishTime = LocalDateTime.now().plusYears(1)
             )
         }
@@ -42,7 +42,10 @@ class TemperatureService {
         return true
     }
 
-    fun getStates() = sensorMap
+    fun getStates() = sensorMap.asSequence()
+            .filter { it.value != null }
+            .map{ it.value }
+            .toList()
 
     fun saveTargets(targets: List<TemperatureTarget>): Boolean {
         targets.forEach {
@@ -52,6 +55,11 @@ class TemperatureService {
     }
 
     fun getTargets() = targetMap
+
+    fun reset(id: String): List<SensorState?> {
+        sensorMap[id] = null
+        return getStates().filter { it != null }
+    }
 
     private fun countEstimatedFinishTime(state: SensorState): LocalDateTime {
         // TODO: Implement this :DD
