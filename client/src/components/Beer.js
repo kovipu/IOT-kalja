@@ -3,10 +3,16 @@ import styled from 'styled-components';
 
 const Beer = (beer) => (
   <BeerWrapper>
-    <img src={'beer.svg'} />
-    Kalja
+    <ImageContainer>
+      <img src="beer.png" width="100%" />
+    </ImageContainer>
   </BeerWrapper>
 );
+
+const ImageContainer = styled.div`
+  display: inline-block;
+  width: 30%;
+`; 
 
 const BeerWrapper = styled.div`
   padding: 10px;

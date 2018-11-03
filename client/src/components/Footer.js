@@ -14,6 +14,8 @@ const FooterWrapper = styled.div`
   text-align: center;
   height: 50px;
   line-height: 50px;
+  position:absolute;
+  bottom:0;
 `;
 
 export default Footer;

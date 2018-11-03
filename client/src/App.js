@@ -56,8 +56,8 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const BeersWrapper = styled.div`
-  min-height: calc(100vh - 130px);
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 `;
 
