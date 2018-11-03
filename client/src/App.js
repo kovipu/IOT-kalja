@@ -42,8 +42,12 @@ class App extends Component {
         <Banner/>
         <BeersWrapper>
         {
-          this.state.data.map(beer => (
-            <Beer key={beer.id} beer={beer}/>
+          this.state.data.map((beer, i) => (
+            <Beer
+              key={beer.id}
+              index={i}
+              beer={beer}
+            />
           ))
         }
         </BeersWrapper>
