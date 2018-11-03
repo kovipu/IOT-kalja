@@ -107,7 +107,6 @@ class TemperatureService {
 
     fun estimatedFinishTime(state: SensorState, target: Double): LocalDateTime {
         val timeLeft = timeLeft(state, target)
-        log.info("TIME LEFT: $timeLeft")
         return LocalDateTime.now().plusMinutes(timeLeft.toLong())
     }
 
