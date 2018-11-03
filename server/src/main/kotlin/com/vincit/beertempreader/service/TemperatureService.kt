@@ -3,21 +3,28 @@ package com.vincit.beertempreader.service
 import com.vincit.beertempreader.model.Reading
 import com.vincit.beertempreader.model.SensorState
 import com.vincit.beertempreader.model.TemperatureTarget
-import com.vincit.util.Test
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 @Service
 class TemperatureService {
+    val log = LoggerFactory.getLogger(TemperatureService::class.java)
+
     val sensorMap = HashMap<String, SensorState?>()
     val targetMap = HashMap<String, Double?>()
 
     fun saveReadings(readings: List<Reading>): Boolean {
+        log.info("Received readings: $readings")
         readings.forEach fe@{reading ->
             val state = sensorMap[reading.id]
             state?.let {
-                // Skip saving if temperature hasn't changed.
+                // Reset if temperature rises too much.
+                if (reading.`object` >= state.readings.last().`object` + 5) {
+                    sensorMap[reading.id] = null
+                }
+                // Skip saving if temperature hasn't lowered.
                 if (reading.`object` >= state.readings.last().`object`) return true
 
                 state.readings.add(reading)
@@ -51,7 +58,7 @@ class TemperatureService {
             .toList()
 
     fun saveTargets(targets: List<TemperatureTarget>): Boolean {
-        val test = Test().test()
+        log.info("Received targets: $targets")
         targets.forEach { temp ->
             targetMap[temp.id] = temp.targetTemperature
             sensorMap[temp.id]?.let {
@@ -76,6 +83,6 @@ class TemperatureService {
     /*
         Zone has no value here.
      */
-    private fun distanceFromNow(first: LocalDateTime) = (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - first.toEpochSecond(ZoneOffset.UTC)) / 60000
+    private fun distanceFromNow(first: LocalDateTime) = (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - first.toEpochSecond(ZoneOffset.UTC)) / 60
 
 }
