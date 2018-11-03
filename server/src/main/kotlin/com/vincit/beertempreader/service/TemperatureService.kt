@@ -24,9 +24,6 @@ class TemperatureService {
                 if (reading.`object` >= state.readings.last().`object` + 5) {
                     sensorMap[reading.id] = null
                 }
-                // Skip saving if temperature hasn't lowered.
-                if (reading.`object` >= state.readings.last().`object`) return true
-
                 state.readings.add(reading)
                 sensorMap[reading.id] = SensorState(
                         id = reading.id,
