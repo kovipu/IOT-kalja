@@ -11,12 +11,12 @@ class TemperatureService {
     val sensorMap = HashMap<String, SensorState>()
 
     fun saveReadings(readings: List<Reading>): Boolean {
-        readings.forEach {reading ->
+        readings.forEach fe@{reading ->
             val state = sensorMap[reading.id]
             state?.let {
 
                 // Skip saving if temperature hasn't changed.
-                if (it.currentTemperature >= state.readings.last().`object`) return true
+                if (reading.`object` >= state.readings.last().`object`) return true
 
                 state.readings.add(reading)
                 sensorMap[reading.id] = SensorState(
@@ -26,12 +26,12 @@ class TemperatureService {
                         currentTemperature = reading.`object`,
                         estimatedFinishTime = countEstimatedFinishTime(state)
                 )
-                return true
+                return@fe
             }
-
             sensorMap[reading.id] = SensorState(
                     sensorId = reading.id,
                     timestamp = LocalDateTime.now(),
+                    readings = arrayListOf(reading),
                     currentTemperature = reading.`object`,
                     estimatedFinishTime = LocalDateTime.now().plusYears(1)
             )
