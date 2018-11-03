@@ -39,7 +39,7 @@ const SettingsButtonWrapper = styled.div`
   bottom: 0.5em;
   right: 0.5em;
   box-shadow: 0 5px 0 -2px rgba(0,0,0,.08);
-  background-color: #ee4f37;
+  background-color: #e08541;
   display: flex;
   justify-content: center;
   align-items: center;
