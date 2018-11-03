@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
-import { getTemp, reset } from './api';
+import { getTemp, reset, setTarget } from './api';
 import Banner from './components/Banner';
 import Settings from './components/Settings';
 import Beer from './components/Beer';
@@ -31,6 +31,11 @@ class App extends Component {
       .then(() => this.getData());
   }
 
+  handleTargetChange(id, target) {
+    setTarget(id, target)
+      .then(() => this.getData());
+  }
+
   render() {
     const setTimeout = (timeout) => this.setState({
       timeout: timeout < 0.1
@@ -56,6 +61,7 @@ class App extends Component {
                 index={i}
                 beer={beer}
                 onResetClick={() => this.handleResetClick(beer.id)}
+                onTargetChange={(target) => this.handleTargetChange(beer.id, target)}
               />
             ))
         }
