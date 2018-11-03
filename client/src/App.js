@@ -15,12 +15,12 @@ class App extends Component {
     const that = this;
     let index = 0;
     const getData = async () => {
-      getTemp(index).then((res) => {
+      getTemp().then((res) => {
         const data = res.data;
         that.setState({ data })
       });
       index = index + 1;
-      setTimeout(getData, 1000)
+      setTimeout(getData, 5000)
     };
     getData();
   }
@@ -33,7 +33,7 @@ class App extends Component {
         <BeersWrapper>
         {
           this.state.data.map(beer => (
-            <Beer beer={beer}/>
+            <Beer key={beer.id} beer={beer}/>
           ))
         }
         </BeersWrapper>
