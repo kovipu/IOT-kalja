@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const Beer = (beer) => (
   <BeerWrapper>
+    <img src={'beer.svg'} />
     Kalja
   </BeerWrapper>
 );
