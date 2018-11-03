@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
+
 import { getTemp } from './api';
+import Banner from './components/Banner';
+import Beer from './components/Beer';
+import Footer from './components/Footer';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: []
-    }
-  }
+  state = {
+    data: []
+  };
+
   componentDidMount() {
     const that = this;
     let index = 0;
@@ -15,16 +18,47 @@ class App extends Component {
       getTemp(index).then((res) => {
         const data = res.data;
         that.setState({ data })
-      })
+      });
       index = index + 1;
       setTimeout(getData, 1000)
     };
     getData();
   }
+
   render() {
-    console.log(this.state.data);
-    return <p>asd</p>
+    return (
+      <div>
+        <GlobalStyle/>
+        <Banner/>
+        <BeersWrapper>
+        {
+          this.state.data.map(beer => (
+            <Beer beer={beer}/>
+          ))
+        }
+        </BeersWrapper>
+        <Footer/>
+      </div>
+    )
   }
 }
+
+const GlobalStyle = createGlobalStyle`
+  html {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  body {
+    background-color: #e0e1e0;
+    padding: 0;
+    margin: 0;
+  }
+`;
+
+const BeersWrapper = styled.div`
+  min-height: calc(100vh - 130px);
+  display: flex;
+  justify-content: center;
+`;
 
 export default App;
