@@ -30,7 +30,8 @@ class TemperatureService {
                         timestamp = LocalDateTime.now(),
                         readings = state.readings,
                         currentTemp = reading.`object`,
-                        estimatedFinishTime = countEstimatedFinishTime(state),
+                        timeLeft = timeLeft(state, state.targetTemp).toLong(),
+                        estimatedFinishTime = estimatedFinishTime(state, targetMap[reading.id] ?: 5.0),
                         timeElapsed = state.readings.first().timestamp.let { distanceFromNow(it!!) },
                         targetTemp = targetMap[reading.id] ?: 5.0
                 )
@@ -41,9 +42,10 @@ class TemperatureService {
                     timestamp = LocalDateTime.now(),
                     readings = arrayListOf(reading),
                     currentTemp = reading.`object`,
+                    timeLeft = 666L,
                     estimatedFinishTime = LocalDateTime.now().plusYears(1),
-                    timeElapsed = 0L,
-                    targetTemp = targetMap[reading.id] ?: 5.0
+                    targetTemp = targetMap[reading.id] ?: 5.0,
+                    timeElapsed = 0L
             )
         }
         return true
@@ -72,9 +74,41 @@ class TemperatureService {
         return getStates().filter { it != null }
     }
 
-    private fun countEstimatedFinishTime(state: SensorState): LocalDateTime {
-        // TODO: Implement this :DD
-        return LocalDateTime.now().plusSeconds(666)
+    private fun timeLeft(state: SensorState, target: Double): Double {
+        var min: Double? = null
+        val filteredTemps = state.readings.map {
+            if (min == null) {
+                min = it.`object`
+                it
+            } else if (min!! > it.`object`) {
+                min = it.`object`
+                it
+            } else {
+                null
+            }
+        }.filter { it != null }
+
+        val utcReadings = filteredTemps.filter { it != null }
+                .map { it!!.timestamp!!.toEpochSecond(ZoneOffset.UTC) to it.`object` }
+
+        val timeStampChanges= ArrayList<Long>()
+        val temperatureChanges = ArrayList<Double>()
+        utcReadings.mapIndexed m@{ i, it ->
+            if (i==0) return@m
+            timeStampChanges.add(it.first - utcReadings[i-1].first)
+            temperatureChanges.add(utcReadings[i-1].second - it.second)
+        }
+
+        val tsc = timeStampChanges.average()
+        val tc = temperatureChanges.average()
+
+        return (state.readings.last().`object` - target) / tc * tsc / 60
+    }
+
+    fun estimatedFinishTime(state: SensorState, target: Double): LocalDateTime {
+        val timeLeft = timeLeft(state, target)
+        log.info("TIME LEFT: $timeLeft")
+        return LocalDateTime.now().plusMinutes(timeLeft.toLong())
     }
 
     /*
