@@ -9,6 +9,8 @@ const Banner = () => (
 
 const BannerWrapper = styled.div`
   width: 100vw;
+  font-family: 'Candal', sans-serif;
+  font-weight: 500;
   background-color: #ee4f37;
   height: 80px;
   text-align: center;

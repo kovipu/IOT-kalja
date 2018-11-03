@@ -5,5 +5,7 @@ export function getTemp() {
 }
 
 export function reset(id) {
-
+  return axios.post('/reset/', id, {
+    headers: { 'Content-Type': 'text/plain' }
+  });
 }
