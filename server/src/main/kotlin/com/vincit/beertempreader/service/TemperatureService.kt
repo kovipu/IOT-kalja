@@ -5,11 +5,9 @@ import com.vincit.beertempreader.model.SensorState
 import com.vincit.beertempreader.model.TemperatureTarget
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import com.vincit.util.Test
 
 @Service
 class TemperatureService {
-    val test = Test()
     val sensorMap = HashMap<String, SensorState?>()
     val targetMap = HashMap<String, Double?>()
 
@@ -26,7 +24,9 @@ class TemperatureService {
                         timestamp = LocalDateTime.now(),
                         readings = state.readings,
                         currentTemp = reading.`object`,
-                        estimatedFinishTime = countEstimatedFinishTime(state)
+                        estimatedFinishTime = countEstimatedFinishTime(state),
+                        timeElapsed = state.readings.first().timestamp.let { distanceFromNow(it!!) },
+                        targetTemp = targetMap[reading.id] ?: 5.0
                 )
                 return@fe
             }
@@ -35,10 +35,11 @@ class TemperatureService {
                     timestamp = LocalDateTime.now(),
                     readings = arrayListOf(reading),
                     currentTemp = reading.`object`,
-                    estimatedFinishTime = LocalDateTime.now().plusYears(1)
+                    estimatedFinishTime = LocalDateTime.now().plusYears(1),
+                    timeElapsed = 0L,
+                    targetTemp = targetMap[reading.id] ?: 5.0
             )
         }
-
         return true
     }
 
@@ -48,8 +49,11 @@ class TemperatureService {
             .toList()
 
     fun saveTargets(targets: List<TemperatureTarget>): Boolean {
-        targets.forEach {
-            targetMap[it.id] = it.targetTemperature
+        targets.forEach { temp ->
+            targetMap[temp.id] = temp.targetTemperature
+            sensorMap[temp.id]?.let {
+                it.targetTemp = temp.targetTemperature
+            }
         }
         return true
     }
@@ -64,6 +68,21 @@ class TemperatureService {
     private fun countEstimatedFinishTime(state: SensorState): LocalDateTime {
         // TODO: Implement this :DD
         return LocalDateTime.now().plusSeconds(666)
+    }
+
+    /**
+     * This does not account for leap years,
+     * but if your beer sits in the fridge over a year,
+     * you have more serious issues than invalid data.
+     */
+    private fun distanceFromNow(first: LocalDateTime): Long {
+        val now = LocalDateTime.now()
+        val years = (now.year - first.year) * (60 * 24 * 365)
+        val days = (now.dayOfYear - first.dayOfYear) * (60 * 24)
+        val hours = (now.hour - first.hour) * 60
+        val minutes = now.minute - first.minute
+
+        return (years + days + hours + minutes).toLong()
     }
 
 }

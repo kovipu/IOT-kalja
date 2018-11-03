@@ -10,5 +10,7 @@ data class SensorState(
         val readings: ArrayList<Reading> = arrayListOf(),
         val currentTemp: Double,
         val estimatedFinishTime: LocalDateTime,
-        val timeLeft: Long? = null
+        val timeElapsed: Long,
+        val timeLeft: Long? = null,
+        var targetTemp: Double
 )
