@@ -1,27 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { getTemp } from './api';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    }
+  }
+  componentDidMount() {
+    const that = this;
+    let index = 0;
+    const getData = async () => {
+      getTemp(index).then((res) => {
+        const data = res.data;
+        that.setState({ data })
+      })
+      index = index + 1;
+      setTimeout(getData, 1000)
+    };
+    getData();
+  }
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+    console.log(this.state.data);
+    return <p>asd</p>
   }
 }
 
