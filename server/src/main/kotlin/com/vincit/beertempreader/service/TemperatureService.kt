@@ -77,14 +77,16 @@ class TemperatureService {
     private fun timeLeft(state: SensorState, target: Double): Double {
         var min: Double? = null
         val filteredTemps = state.readings.map {
-            if (min == null) {
-                min = it.`object`
-                it
-            } else if (min!! > it.`object`) {
-                min = it.`object`
-                it
-            } else {
-                null
+            when {
+                min == null -> {
+                    min = it.`object`
+                    it
+                }
+                min!! > it.`object` -> {
+                    min = it.`object`
+                    it
+                }
+                else -> null
             }
         }.filter { it != null }
 
