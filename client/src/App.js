@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
-import { getTemp } from './api';
+import { getTemp, reset } from './api';
 import Banner from './components/Banner';
 import Settings from './components/Settings';
 import Beer from './components/Beer';
@@ -13,16 +13,22 @@ class App extends Component {
   };
 
   componentDidMount() {
+    this.getData()
+      .catch(err => console.log(err));
+  }
+
+  async getData() {
     const that = this;
-    const getData = async () => {
-      console.log('fetching');
-      getTemp().then((res) => {
-        const data = res.data;
-        that.setState({ data })
-      });
-      setTimeout(getData, this.state.timeout * 60000)
-    };
-    getData();
+    getTemp()
+      .then(res => that.setState({
+        data: res.data
+      }));
+    setTimeout(this.getData, this.state.timeout * 60000);
+  }
+
+  handleResetClick(id) {
+    reset(id)
+      .then(() => this.getData());
   }
 
   render() {
@@ -42,13 +48,16 @@ class App extends Component {
         <Banner/>
         <BeersWrapper>
         {
-          this.state.data.map((beer, i) => (
-            <Beer
-              key={beer.id}
-              index={i}
-              beer={beer}
-            />
-          ))
+          this.state.data
+            .sort((a, b) => a.id > b.id ? 1 : -1)
+            .map((beer, i) => (
+              <Beer
+                key={beer.id}
+                index={i}
+                beer={beer}
+                onResetClick={() => this.handleResetClick(beer.id)}
+              />
+            ))
         }
         </BeersWrapper>
       </div>

@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Beer = ({ beer, index }) => (
+const Beer = ({ beer, index, onResetClick }) => (
   <BeerWrapper>
     <ImageContainer>
       <img src="beer.png" width="100%" />
     </ImageContainer>
     <DataWrapper>
-      <TitleWrapper>Kalja {index + 1}</TitleWrapper>
+      <TitleWrapper>Kalja {beer.id}</TitleWrapper>
       <Row
         name="lämpötila"
         value={beer.currentTemp}
@@ -27,13 +27,18 @@ const Beer = ({ beer, index }) => (
         name="valmistumisaika"
         value={parseTime(beer.estimatedFinishTime)}
       />
+      <ResetButton onClick={onResetClick}>
+        <i className="fas fa-sync"/>
+      </ResetButton>
     </DataWrapper>
   </BeerWrapper>
 );
 
 const Row = ({ name, value, unit }) => (
   <RowWrapper>
-    <RowNameWrapper>{name}</RowNameWrapper>
+    <RowNameWrapper>
+      {name}
+    </RowNameWrapper>
     {value}
     {unit}
   </RowWrapper>
@@ -63,7 +68,7 @@ const DataWrapper = styled.div`
 `;
 
 const TitleWrapper = styled.div`
-  font-size: 2em;
+  font-size: 1.5em;
   font-weight: 600;
   text-align: center;
   padding-bottom: 6px;
@@ -81,5 +86,17 @@ const RowNameWrapper = styled.div`
   padding: 0 6px;
 `;
 
+const ResetButton = styled.div`
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  border-radius: 50%;  
+  background-color: #ee4f37;
+  cursor: pointer;
+  text-align: center;
+  margin-left: auto;
+  margin-right: 6px;
+  margin-top: 10px;
+`;
 
 export default Beer;
