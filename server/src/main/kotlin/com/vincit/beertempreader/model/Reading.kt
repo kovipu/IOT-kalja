@@ -1,9 +1,12 @@
 package com.vincit.beertempreader.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDateTime
 
 data class Reading(
-        val sensorId: String,
+        val id: String,
+        @JsonIgnore
         val timestamp: LocalDateTime? = LocalDateTime.now(),
-        val temperature: Double
+        val ambient: Double,
+        val `object`: Double
 )

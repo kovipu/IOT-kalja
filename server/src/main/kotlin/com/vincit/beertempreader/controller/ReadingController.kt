@@ -15,6 +15,6 @@ class ReadingController(@Autowired val temperatureService: TemperatureService) {
     @GetMapping("/states")
     fun getStates() = temperatureService.getStates()
 
-    @PostMapping("/newreading")
-    fun saveReading(@RequestBody reading: Reading) = temperatureService.saveReading(reading)
+    @PostMapping("/newreadings")
+    fun saveReadings(@RequestBody readings: List<Reading>) = temperatureService.saveReadings(readings)
 }
