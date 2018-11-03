@@ -2,6 +2,7 @@ package com.vincit.beertempreader.service
 
 import com.vincit.beertempreader.model.Reading
 import com.vincit.beertempreader.model.SensorState
+import com.vincit.beertempreader.model.TemperatureTarget
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime
 class TemperatureService {
 
     val sensorMap = HashMap<String, SensorState>()
+    val targetMap = HashMap<String, Double>()
 
     fun saveReadings(readings: List<Reading>): Boolean {
         readings.forEach fe@{reading ->
@@ -41,6 +43,15 @@ class TemperatureService {
     }
 
     fun getStates() = sensorMap
+
+    fun saveTargets(targets: List<TemperatureTarget>): Boolean {
+        targets.forEach {
+            targetMap[it.id] = it.targetTemperature
+        }
+        return true
+    }
+
+    fun getTargets() = targetMap
 
     private fun countEstimatedFinishTime(state: SensorState): LocalDateTime {
         // TODO: Implement this :DD
