@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Beer = ({ beer, index, onResetClick }) => (
+const Beer = ({beer, index, onResetClick, onTargetChange}) => (
   <BeerWrapper>
     <ImageContainer>
-      <img src="beer.png" width="100%" />
+      <img src="beer.png" width="100%"/>
     </ImageContainer>
     <DataWrapper>
       <TitleWrapper>Kalja {beer.id}</TitleWrapper>
@@ -27,14 +27,30 @@ const Beer = ({ beer, index, onResetClick }) => (
         name="valmistumisaika"
         value={parseTime(beer.estimatedFinishTime)}
       />
-      <ResetButton onClick={onResetClick}>
-        <i className="fas fa-sync"/>
-      </ResetButton>
+      <ControlsWrapper>
+        <TargetFieldWrapper>
+          <strong>Tavoite</strong>
+          <TargetInputWrapper>
+            <TargetTempField
+              type="number"
+              value={beer.targetTemp}
+              onChange={(ev) => onTargetChange(clamp(ev.target.value, 0, 25))}
+            />
+            °C
+          </TargetInputWrapper>
+        </TargetFieldWrapper>
+        <ResetButton onClick={onResetClick}>
+          <i className="fas fa-sync"/>
+        </ResetButton>
+      </ControlsWrapper>
     </DataWrapper>
   </BeerWrapper>
 );
 
-const Row = ({ name, value, unit }) => (
+// clamps a value between 2 numbers
+const clamp = (num, min, max) => num <= min ? min : num >= max ? max : num;
+
+const Row = ({name, value, unit}) => (
   <RowWrapper>
     <RowNameWrapper>
       {name}
@@ -86,6 +102,38 @@ const RowNameWrapper = styled.div`
   padding: 0 6px;
 `;
 
+const ControlsWrapper = styled.div`
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+`;
+
+const TargetFieldWrapper = styled.div`
+  width: 70%;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+`;
+
+const TargetInputWrapper = styled.div`
+  display: inline-flex;
+  line-height: 30px;
+  font-size: 1.3em;
+  color: #888;
+`;
+
+const TargetTempField = styled.input`
+  display: block;
+  height: 30px;
+  width: 80px;
+  font-size: 1.3em;
+  background-color: transparent;
+  color: #888;
+  border: none;
+  text-align: right;
+`;
+
 const ResetButton = styled.div`
   width: 60px;
   height: 60px;
@@ -94,7 +142,6 @@ const ResetButton = styled.div`
   background-color: #ee4f37;
   cursor: pointer;
   text-align: center;
-  margin-left: auto;
   margin-right: 6px;
   margin-top: 10px;
 `;

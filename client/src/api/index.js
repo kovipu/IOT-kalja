@@ -9,3 +9,10 @@ export function reset(id) {
     headers: { 'Content-Type': 'text/plain' }
   });
 }
+
+export function setTarget(id, targetTemperature) {
+  return axios.post('/targets/', [{
+    id,
+    targetTemperature
+  }]);
+}
