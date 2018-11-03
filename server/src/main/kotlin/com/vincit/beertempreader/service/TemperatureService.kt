@@ -3,8 +3,10 @@ package com.vincit.beertempreader.service
 import com.vincit.beertempreader.model.Reading
 import com.vincit.beertempreader.model.SensorState
 import com.vincit.beertempreader.model.TemperatureTarget
+import com.vincit.util.Test
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Service
 class TemperatureService {
@@ -49,6 +51,7 @@ class TemperatureService {
             .toList()
 
     fun saveTargets(targets: List<TemperatureTarget>): Boolean {
+        val test = Test().test()
         targets.forEach { temp ->
             targetMap[temp.id] = temp.targetTemperature
             sensorMap[temp.id]?.let {
@@ -70,19 +73,9 @@ class TemperatureService {
         return LocalDateTime.now().plusSeconds(666)
     }
 
-    /**
-     * This does not account for leap years,
-     * but if your beer sits in the fridge over a year,
-     * you have more serious issues than invalid data.
+    /*
+        Zone has no value here.
      */
-    private fun distanceFromNow(first: LocalDateTime): Long {
-        val now = LocalDateTime.now()
-        val years = (now.year - first.year) * (60 * 24 * 365)
-        val days = (now.dayOfYear - first.dayOfYear) * (60 * 24)
-        val hours = (now.hour - first.hour) * 60
-        val minutes = now.minute - first.minute
-
-        return (years + days + hours + minutes).toLong()
-    }
+    private fun distanceFromNow(first: LocalDateTime) = (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - first.toEpochSecond(ZoneOffset.UTC)) / 60000
 
 }
