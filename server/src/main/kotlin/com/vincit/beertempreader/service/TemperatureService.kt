@@ -31,7 +31,7 @@ class TemperatureService {
                         readings = state.readings,
                         currentTemp = reading.`object`,
                         timeLeft = timeLeft(state, state.targetTemp).toLong(),
-                        estimatedFinishTime = estimatedFinishTime(state, targetMap[reading.id] ?: 5.0),
+                        estimatedFinishTime = estimatedFinishTime(state, targetMap[reading.id] ?: reading.ambient),
                         timeElapsed = state.readings.first().timestamp.let { distanceFromNow(it!!) },
                         targetTemp = targetMap[reading.id] ?: 5.0
                 )
@@ -44,7 +44,7 @@ class TemperatureService {
                     currentTemp = reading.`object`,
                     timeLeft = 666L,
                     estimatedFinishTime = LocalDateTime.now().plusYears(1),
-                    targetTemp = targetMap[reading.id] ?: 5.0,
+                    targetTemp = targetMap[reading.id] ?: reading.ambient,
                     timeElapsed = 0L
             )
         }
