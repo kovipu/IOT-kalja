@@ -3,32 +3,42 @@ import styled, { createGlobalStyle } from 'styled-components';
 
 import { getTemp } from './api';
 import Banner from './components/Banner';
+import Settings from './components/Settings';
 import Beer from './components/Beer';
-import Footer from './components/Footer';
 
 class App extends Component {
   state = {
-    data: []
+    data: [],
+    timeout: 3
   };
 
   componentDidMount() {
     const that = this;
-    let index = 0;
     const getData = async () => {
+      console.log('fetching');
       getTemp().then((res) => {
         const data = res.data;
         that.setState({ data })
       });
-      index = index + 1;
-      setTimeout(getData, 5000)
+      setTimeout(getData, this.state.timeout * 60000)
     };
     getData();
   }
 
   render() {
+    const setTimeout = (timeout) => this.setState({
+      timeout: timeout < 0.1
+        ? 0.1
+        : timeout
+    });
+
     return (
       <div>
         <GlobalStyle/>
+        <Settings
+          timeout={this.state.timeout}
+          setTimeout={setTimeout}
+        />
         <Banner/>
         <BeersWrapper>
         {
@@ -69,6 +79,7 @@ const GlobalStyle = createGlobalStyle`
 const BeersWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+  min-height: calc(100vh - 130px);
   justify-content: center;
 `;
 
