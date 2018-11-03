@@ -24,4 +24,7 @@ class ReadingController(@Autowired val temperatureService: TemperatureService) {
 
     @GetMapping("/targets")
     fun getTargets() = temperatureService.getTargets()
+
+    @PostMapping("/reset")
+    fun reset(@RequestBody id: String) = temperatureService.reset(id)
 }
