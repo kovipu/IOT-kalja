@@ -37,7 +37,6 @@ class App extends Component {
           ))
         }
         </BeersWrapper>
-        <Footer/>
       </div>
     )
   }
@@ -52,12 +51,24 @@ const GlobalStyle = createGlobalStyle`
     background-color: #e0e1e0;
     padding: 0;
     margin: 0;
+    height: 100%
+    min-height: 100vh
+  }
+  .footer {
+    background-color: #1c1b1d;
+    color: #dddddd;
+    width: 100vw;
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    position:relative;
+    bottom:0;
   }
 `;
 
 const BeersWrapper = styled.div`
-  min-height: calc(100vh - 130px);
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 `;
 
