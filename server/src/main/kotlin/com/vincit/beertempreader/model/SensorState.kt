@@ -12,5 +12,6 @@ data class SensorState(
         val estimatedFinishTime: LocalDateTime,
         val timeElapsed: Long,
         val timeLeft: Long? = null,
-        var targetTemp: Double
+        var targetTemp: Double,
+        val ambient: Double
 )
