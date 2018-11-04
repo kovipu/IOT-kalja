@@ -4,13 +4,20 @@ import styled, { createGlobalStyle } from 'styled-components';
 import { getTemp, reset, setTarget } from './api';
 import Banner from './components/Banner';
 import Settings from './components/Settings';
+import RefreshButton from './components/RefreshButton';
 import Beer from './components/Beer';
 
 class App extends Component {
-  state = {
-    data: [],
-    timeout: 3
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: [],
+      timeout: 3
+    };
+
+    this.getData = this.getData.bind(this);
+  }
 
   componentDidMount() {
     this.getData()
@@ -46,6 +53,7 @@ class App extends Component {
     return (
       <div>
         <GlobalStyle/>
+        <RefreshButton onClick={this.getData}/>
         <Settings
           timeout={this.state.timeout}
           setTimeout={setTimeout}

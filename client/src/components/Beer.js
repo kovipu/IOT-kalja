@@ -40,7 +40,7 @@ const Beer = ({beer, index, onResetClick, onTargetChange}) => (
           </TargetInputWrapper>
         </TargetFieldWrapper>
         <ResetButton onClick={onResetClick}>
-          <i className="fas fa-sync"/>
+          <i className="fas fa-minus"/>
         </ResetButton>
       </ControlsWrapper>
     </DataWrapper>
@@ -126,7 +126,7 @@ const TargetInputWrapper = styled.div`
 const TargetTempField = styled.input`
   display: block;
   height: 30px;
-  width: 80px;
+  width: 90px;
   font-size: 1.3em;
   background-color: transparent;
   color: #888;
@@ -144,6 +144,7 @@ const ResetButton = styled.div`
   text-align: center;
   margin-right: 6px;
   margin-top: 10px;
+  box-shadow: 0 5px 0 -2px rgba(0,0,0,.08);
 `;
 
 export default Beer;
