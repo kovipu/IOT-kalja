@@ -9,8 +9,13 @@ const Beer = ({beer, index, onResetClick, onTargetChange}) => (
     <DataWrapper>
       <TitleWrapper>Kalja {beer.id}</TitleWrapper>
       <Row
-        name="lämpötila"
+        name="kalja"
         value={beer.currentTemp}
+        unit="°C"
+      />
+      <Row
+        name="ympäristö"
+        value={beer.ambient}
         unit="°C"
       />
       <Row
@@ -66,7 +71,7 @@ const BeerWrapper = styled.div`
   padding: 10px;
   margin: 16px;
   background-color: #f5f5f6;
-  max-height: 223px;
+  max-height: 240px;
   width: 400px;
   @media(max-width: 768px) {
     width: 100vw;
