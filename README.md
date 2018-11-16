@@ -1,7 +1,7 @@
 # IOT-kalja
 IOT-kaljanlämpömittari web-applikaatio
 
-Mittaa tölkin lämpötilaa mirkokontrollerissa kiinni olevan 
+Mittaa tölkin lämpötilaa mikrokontrollerissa kiinni olevan 
 infrapunasensorin avulla ja lähettää sen palvelimelle JSONina.
 
 Palvelin kerää sensorien tiedot ja laskee niistä koska kalja on tavoitelämpötilassa.
